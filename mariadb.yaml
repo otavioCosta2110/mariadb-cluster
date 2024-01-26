@@ -30,33 +30,34 @@ spec:
     spec:
       containers:
       - name: mariadb-galera
-        image: mariadb:10.6  # Use a Galera-compatible image
+        image: mariadb:10.6 # Galera-compatible image
         env:
         - name: MARIADB_ROOT_PASSWORD
           valueFrom:
             secretKeyRef:
               name: mariadb-galera-secret
               key: mariadb-root-password
-        - name: MARIADB_GALERA_CLUSTER
-          value: "yes"
+        - name: MARIADB_GALERA_CLUSTER 
+          value: "yes" # Enables Galera
         - name: MARIADB_GALERA_ARBITRATOR
           value: "false"
         - name: MARIADB_GALERA_GROUP
-          value: "db_group"
+          value: "db_group" # Needed for the synchronization of the pods
         - name: MARIADB_GALERA_OPTIONS
-          value: "gcs.fc_limit=256;gmcast.listen_addr=tcp://0.0.0.0:4567"  # Adjust as needed
+          value: "gcs.fc_limit=256;gmcast.listen_addr=tcp://0.0.0.0:4567" 
         ports:
         - name: mysql
           containerPort: 3306
         volumeMounts:
         - name: mariadb-data
           mountPath: /var/lib/mysql
+  # Volume for the pods
   volumeClaimTemplates:
   - metadata:
       name: mariadb-data
     spec:
       accessModes: [ "ReadWriteOnce" ]
-      storageClassName: "standard"  # Replace with your desired StorageClass
+      storageClassName: "standard"
       resources:
         requests:
-          storage: 3Gi  # Adjust as needed
+          storage: 3Gi
