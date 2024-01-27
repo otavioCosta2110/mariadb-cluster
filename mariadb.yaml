@@ -19,7 +19,7 @@ metadata:
   name: mariadb-galera
 spec:
   serviceName: mariadb-galera
-  replicas: 3
+  replicas: 3 # 3 Instaces of mariadb
   selector:
     matchLabels:
       app: mariadb-galera
@@ -49,12 +49,12 @@ spec:
         - name: mysql
           containerPort: 3306
         volumeMounts:
-        - name: mariadb-data
+        - name: mariadb-volume
           mountPath: /var/lib/mysql
   # Volume for the pods
   volumeClaimTemplates:
   - metadata:
-      name: mariadb-data
+      name: mariadb-volume
     spec:
       accessModes: [ "ReadWriteOnce" ]
       storageClassName: "standard"
